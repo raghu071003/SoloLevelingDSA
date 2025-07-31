@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@font-face {
+  font-family: 'SoloLevel';
+  src: url('./fonts/SoloLevelDemo.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+body{
+    font-family: 'SoloLevel';
+    letter-spacing: 3px;
+}
