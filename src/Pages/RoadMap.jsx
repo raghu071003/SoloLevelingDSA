@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import sheet from '../data/progress.json'
 import Topic from '../components/Topic'
+import { MyContext } from '../context/Context'
+import Problems from '../components/Problems'
 const RoadMap = () => {
+    const {open,onClose} = useContext(MyContext); 
     const totalDone = sheet.reduce((sum, topic) => sum + topic.doneQuestions, 0);
     const overallProgress = totalDone > 0 ? (totalDone / 450) * 100 : 0;
     
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+            {open && <Problems onClose={onClose}/>}
             {/* Background effects */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent_50%)]"></div>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.1),transparent_50%)]"></div>

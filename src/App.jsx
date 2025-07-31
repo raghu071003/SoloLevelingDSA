@@ -3,10 +3,10 @@ import Homepage from './Pages/Homepage'
 import Navbar from './components/Navbar'
 import {BrowserRouter,Route,Routes} from 'react-router-dom'
 import RoadMap from './Pages/RoadMap'
-
+import { ContextProvider } from './context/Context'
 const App = () => {
   return (
-    <>
+    <ContextProvider>
       
       <BrowserRouter>
       <Navbar />
@@ -17,7 +17,7 @@ const App = () => {
       
       </BrowserRouter>
       
-    </>
+    </ContextProvider>
   )
 }
 

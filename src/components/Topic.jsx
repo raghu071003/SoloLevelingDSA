@@ -1,21 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Problems from './Problems';
+import { MyContext } from '../context/Context';
 
 const Topic = ({name, started, done,problem}) => {
     // Calculate completion percentage if started is provided
+    const {prob,setProb,setOpen} = useContext(MyContext);
     const completionRate = started ? (done / total) * 100 : 0;
-    const [open,setOpen] = useState(false);
-    const [prob,setProb] = useState([]);
     const handleClick =()=>{
         setProb(problem)
         setOpen(true);
-    }
-    const onClose = ()=>{
-        setOpen(false);
-    }
+    }    
     return (
-        <div>
-        {open && <Problems probs = {prob} onClose={onClose}/>}
+        <div>    
         
         <div className="relative group hover:cursor-pointer" onClick={handleClick}>
             
