@@ -10,6 +10,7 @@ export function ContextProvider({ children }) {
     const [prob,setProb] = useState([]);
     const [loggedin,setLoggedIn] = useState(false);
     const [user,setUser] = useState();
+    const [name,setName] = useState("");
 
     useEffect(()=>{
       authStatus()
@@ -22,7 +23,6 @@ export function ContextProvider({ children }) {
         const res = await axios.post('http://localhost:8090/api/v1/user/authStatus',{},{withCredentials:true});
         if(res.status === 200){
           setLoggedIn(true);
-          // console.log(res.data); 
           
           setUser(res.data.user)
         }
@@ -32,7 +32,7 @@ export function ContextProvider({ children }) {
     }
 
   return (
-    <MyContext.Provider value={{ open, setOpen,prob,setProb,onClose,loggedin,setLoggedIn }}>
+    <MyContext.Provider value={{ open, setOpen,prob,setProb,onClose,loggedin,setLoggedIn,user,setUser,name,setName }}>
       {children}
     </MyContext.Provider>
   );

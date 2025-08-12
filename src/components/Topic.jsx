@@ -4,11 +4,14 @@ import { MyContext } from '../context/Context';
 
 const Topic = ({name, started, done,problem}) => {
     // Calculate completion percentage if started is provided
-    const {prob,setProb,setOpen} = useContext(MyContext);
+    const {prob,setProb,setOpen,setName} = useContext(MyContext);
     const completionRate = started ? (done / total) * 100 : 0;
+
+    
     const handleClick =()=>{
         setProb(problem)
         setOpen(true);
+        setName(name)
     }    
     return (
         <div>    

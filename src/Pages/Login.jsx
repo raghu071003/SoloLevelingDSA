@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate()
-  const {setLoggedIn} = useContext(MyContext)
+  const {setLoggedIn,user,setUser} = useContext(MyContext)
 
   const handleLogin = async()=>{
     try {
@@ -17,6 +17,9 @@ const Login = () => {
         if(res.status === 200){
             navigate('/');
             setLoggedIn(true)
+            console.log(res.data.user);
+            
+            setUser(res.data.user)
         }
     } catch (error) {
         console.log(error);

@@ -7,6 +7,7 @@ import { ContextProvider, MyContext } from './context/Context'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
 import Profile from './Pages/Profile'
+import Leaderboard from './Pages/Leaderboard'
 const App = () => {
   const {loggedin} = useContext(MyContext)
   return (
@@ -17,7 +18,8 @@ const App = () => {
           <Route path = '/roadmap' element={loggedin ? <RoadMap /> : <Login />} />
           <Route path = '/profile' element={loggedin ? <Profile /> : <Login />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/register' element = {loggedin ? <RoadMap></RoadMap> : <Register />} />
+          <Route path='/register' element = {loggedin ? <RoadMap></RoadMap> : <Login />} />
+          <Route path='/leaderboard' element = {loggedin ? <Leaderboard /> : <Login />} />
         </Routes>
       
       </BrowserRouter>

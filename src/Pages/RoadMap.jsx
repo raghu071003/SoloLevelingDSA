@@ -1,13 +1,17 @@
-import React, { useContext } from 'react'
-import sheet from '../data/progress.json'
+import React, { useContext, useEffect,useState } from 'react'
+// import sheet from '../data/progress.json'
 import Topic from '../components/Topic'
 import { MyContext } from '../context/Context'
 import Problems from '../components/Problems'
 const RoadMap = () => {
-    const {open,onClose} = useContext(MyContext); 
+    const [sheet,setSheet] = useState([]);
+    const {open,onClose,user} = useContext(MyContext); 
     const totalDone = sheet.reduce((sum, topic) => sum + topic.doneQuestions, 0);
     const overallProgress = totalDone > 0 ? (totalDone / 450) * 100 : 0;
     
+    useEffect(()=>{
+        setSheet(user.progress)
+    },[sheet])
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
             {open && <Problems onClose={onClose}/>}
@@ -23,39 +27,9 @@ const RoadMap = () => {
             <div className="relative z-10 p-8">
                 {/* Header Section */}
                 <div className="text-center mb-12">
-                    <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
+                    <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent mt-20">
                         Hunter's Progress
                     </h1>
-                    <div className="flex items-center justify-center space-x-8 mb-6">
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-white">{totalDone}</div>
-                            <div className="text-xl text-slate-400">Challenges Cleared</div>
-                        </div>
-                        <div className="w-px h-12 bg-gradient-to-b from-transparent via-slate-600 to-transparent"></div>
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-white">{}</div>
-                            <div className="text-xl text-slate-400">Total Dungeons</div>
-                        </div>
-                        <div className="w-px h-12 bg-gradient-to-b from-transparent via-slate-600 to-transparent"></div>
-                        <div className="text-center">
-                            <div className="text-4xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-                                S
-                            </div>
-                            <div className="text-xl text-slate-400">Rank</div>
-                        </div>
-                    </div>
-                    
-                    {/* Overall progress bar */}
-                    <div className="max-w-md mx-auto">
-                        <div className="w-full bg-slate-800/50 rounded-full h-3 overflow-hidden border border-slate-700/50">
-                            <div 
-                                className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 transition-all duration-1000 rounded-full relative"
-                                style={{ width: `${overallProgress}%` }}
-                            >
-                                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 {/* Cards Grid */}

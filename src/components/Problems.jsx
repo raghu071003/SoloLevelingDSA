@@ -2,13 +2,16 @@ import React, { useContext, useEffect, useState } from 'react'
 import { MyContext } from '../context/Context';
 import gfgLogo from '../assets/gfglogo.png'
 import cnLogo from '../assets/cnlogo.png'
-const ProblemCard = ({ prob,index,update }) => {
-    const handleSolve=()=>{
-        update(index,true);
+import axios from 'axios';
+import ProblemHelperModal from './ProblemHelper';
+const ProblemCard = ({ prob, index, update,setIsOpen,setUrl}) => {
+    const handleSolve = () => {
+        update(index, true);
     }
-    useEffect(()=>{
-
-    })
+    const handleHelp = (url)=>{
+       setIsOpen(true)
+       setUrl(url)
+    }    
     return (
         <div className="group relative">
             <div className={`
@@ -19,12 +22,17 @@ const ProblemCard = ({ prob,index,update }) => {
                 transform hover:scale-[1.02]
                 cursor-pointer
             `}>
-                
+
                 <div className="flex items-center justify-between gap-3">
-                    <input type="checkbox" checked={prob.Done} onChange={(e) => update(index, e.target.checked)}/>
+                    <input type="checkbox" checked={prob.Done} onChange={(e) => update(index, e.target.checked)} />
                     <h3 className="text-white  text-3xl flex-1 pr-4">
                         {prob.Problem}
                     </h3>
+                    {prob.SoloLevelRank && (
+                    <p className="text-white text-2xl mt-2 line-clamp-2">
+                        {prob.SoloLevelRank} Rank
+                    </p>
+                )}
                     <div className={`
                         px-3 py-1 rounded-full text-xl font-bold text-white
                         bg-gradient-to-r bg-gray-300
@@ -43,32 +51,87 @@ const ProblemCard = ({ prob,index,update }) => {
                     </div>
                 </div>
 
-                {prob.description && (
-                    <p className="text-slate-300 text-xl mt-2 line-clamp-2">
-                        {prob.description}
-                    </p>
-                )}
-
                 <div className="flex items-center justify-between mt-3 text-xl text-slate-400">
                     {prob.id && <span>#{prob.id}</span>}
-                    {prob.Done && <span className="text-green-400">✓ Solved</span>}
+                    {prob.Done ? <span className="text-green-400">✓ Solved</span> : <span></span>}
+                    <div className="flex items-center justify-between mt-3 text-xl text-slate-400 hover:text-white" onClick={()=>handleHelp(prob.URL)}> Get help</div>
                 </div>
+                
             </div>
         </div>
     );
 };
 
-const Problems = ({ onClose, name }) => {
+const Problems = ({ onClose }) => {
     const [questions, setQuestions] = useState([]);
-    const { prob } = useContext(MyContext)
+    const [loading, setLoading] = useState(false);
+    const { prob, name, user, setUser } = useContext(MyContext)
+    const [isOpen, setIsOpen] = useState(false);
+    const [url,setUrl] = useState("");
     useEffect(() => {
         if (prob != null) {
             setQuestions(prob);
         }
     }, [prob])
-    const update = (index,val)=>{
-        prob[index].Done = val;
-    }
+    const update = async (index, val) => {
+        try {
+            setLoading(true);
+
+            const problem = questions[index];
+
+            // XP values per rank
+            const rankXP = {
+                E: 10,
+                D: 20,
+                C: 30,
+                B: 50,
+                A: 70,
+                S: 100
+            };
+
+            let xpChange = rankXP[problem.SoloLevelRank] || 0;
+
+            // If unchecking, XP should be negative
+            if (!val) {
+                xpChange = -xpChange;
+            }
+
+            const payload = {
+                topicName: name,
+                problemName: problem.Problem,
+                done: val,
+                xpChange: xpChange
+            };
+            setUser((prev) => {
+                if (!prev) return prev; // safeguard if prev is null
+
+                return {
+                    ...prev,
+                    xp: prev.xp + xpChange, // apply XP change
+                };
+            });
+
+            const res = await axios.post(
+                "http://localhost:8090/api/v1/user/updateProgress",
+                payload,
+                { withCredentials: true }
+            );
+
+            if (res.status === 200) {
+                setQuestions(prev => {
+                    const updated = [...prev];
+                    updated[index].Done = val;
+                    return updated;
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     return (
         <>
             {questions && <div className="absolute inset-0 z-50 flex items-center justify-center">
@@ -77,9 +140,11 @@ const Problems = ({ onClose, name }) => {
                     className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                     onClick={onClose}
                 ></div>
+                
 
                 {/* Modal Content */}
                 <div className="w-full max-w-4xl max-h-[90vh] mx-4">
+                    {isOpen && <ProblemHelperModal isOpen={isOpen} onClose={() => setIsOpen(false)} url={url}/> }
                     <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden">
 
                         <div className="relative p-6 border-b border-slate-700/50">
@@ -120,11 +185,11 @@ const Problems = ({ onClose, name }) => {
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     <div className="w-2 h-2 bg-gradient-to-r from-green-400 to-green-600 rounded-full"></div>
-                                    <span className="text-slate-300">Solved: {questions.filter(p => p.solved).length}</span>
+                                    <span className="text-slate-300">Solved: {questions.filter(p => p.Done).length}</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"></div>
-                                    <span className="text-slate-300">Remaining: {questions.filter(p => !p.solved).length}</span>
+                                    <span className="text-slate-300">Remaining: {questions.filter(p => !p.Done).length}</span>
                                 </div>
                             </div>
                         </div>
@@ -142,7 +207,7 @@ const Problems = ({ onClose, name }) => {
                                                 animationFillMode: 'both'
                                             }}
                                         >
-                                            <ProblemCard prob={prob} index={key} update={update}/>
+                                            <ProblemCard prob={prob} index={key} update={update} isOpen={isOpen} onClose={onClose} setIsOpen={setIsOpen} setUrl={setUrl}/>
                                         </div>
                                     );
                                 })}

@@ -1,46 +1,73 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 export default function Profile() {
   const [currentExp, setCurrentExp] = useState(0);
-  const [maxExp, setMaxExp] = useState(0);
-  const [level, setLevel] = useState(47);
+  const [maxExp, setMaxExp] = useState(21320);
   const [rank, setRank] = useState('E-Rank');
   const [name, setName] = useState('');
   const [animateProgress, setAnimateProgress] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [done, setDone] = useState(0);
+  const [doneTopic, setDoneTopics] = useState(0);
+  const navigate = useNavigate()
   const progressPercentage =
     maxExp > 0 ? (currentExp / maxExp) * 100 : 0;
 
   const fetchData = async () => {
-    try {
-      const res = await axios.post(
-        'http://localhost:8090/api/v1/user/profile',
-        {},
-        { withCredentials: true }
-      );
+  try {
+    const res = await axios.post(
+      'http://localhost:8090/api/v1/user/profile',
+      {},
+      { withCredentials: true }
+    );
 
-      const user = res.data.userProfile || {};
-      setName(user.fullName || '');
-      setRank(user.rank || 'E-Rank');
-      setCurrentExp(Number(user.exp || 0));
-      setMaxExp(Number(user.maxExp || 1)); // Avoid divide-by-zero
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    } finally {
-      setLoading(false);
-      setAnimateProgress(true);
-    }
-  };
+    const user = res.data.userProfile || {};
+
+    // First set exp-related state
+    const expValue = Number(user.exp || 0);
+    setCurrentExp(expValue);
+
+    // Now calculate rank with the fresh exp
+    const userRank = getUserRank(expValue);
+    setRank(userRank);
+
+    setName(user.fullName || '');
+    setMaxExp(21320);
+
+    // Calculate done count
+    setDone(
+      user.progress?.reduce(
+        (total, topic) => total + topic.doneQuestions,
+        0
+      ) || 0
+    );
+
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+  } finally {
+    setLoading(false);
+    setAnimateProgress(true);
+  }
+};
+
+  const getUserRank = (exp) => {
+  const percentage = (exp / maxExp) * 100;
+
+  if (percentage >= 90) return "S";
+  if (percentage >= 80) return "A";
+  if (percentage >= 60) return "B";
+  if (percentage >= 40) return "C";
+  if (percentage >= 20) return "D";
+  return "E";
+};
+
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const handleExpIncrease = () => {
-    setCurrentExp(prev => Math.min(prev + 150, maxExp));
-  };
 
   if (loading) {
     return (
@@ -82,14 +109,6 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* Level */}
-          <div className="mb-6 text-center">
-            <div className="text-6xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-2">
-              {level}
-            </div>
-            <div className="text-xl text-gray-300 font-medium">LEVEL</div>
-          </div>
-
           {/* Experience Bar */}
           <div className="mb-6">
             <div className="flex justify-between items-center mb-3">
@@ -104,9 +123,8 @@ export default function Profile() {
             <div className="relative">
               <div className="w-full h-6 bg-gray-700/50 rounded-full border border-gray-600/30 overflow-hidden">
                 <div
-                  className={`h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out relative ${
-                    animateProgress ? 'animate-pulse' : ''
-                  }`}
+                  className={`h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out relative ${animateProgress ? 'animate-pulse' : ''
+                    }`}
                   style={{ width: `${progressPercentage}%` }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
@@ -125,13 +143,13 @@ export default function Profile() {
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-gray-800/50 border border-gray-600/30 rounded-lg p-4 text-center">
-              <div className="text-2xl text-red-400 mb-1">1,247</div>
+              <div className="text-2xl text-red-400 mb-1">{done}</div>
               <div className="text-sm text-gray-400 uppercase tracking-wide">
-                Monsters Defeated
+                Challanges Solved
               </div>
             </div>
             <div className="bg-gray-800/50 border border-gray-600/30 rounded-lg p-4 text-center">
-              <div className="text-2xl text-green-400 mb-1">89</div>
+              <div className="text-2xl text-green-400 mb-1">{doneTopic}</div>
               <div className="text-sm text-gray-400 uppercase tracking-wide">
                 Dungeons Cleared
               </div>
@@ -140,7 +158,7 @@ export default function Profile() {
 
           {/* Action Button */}
           <button
-            onClick={handleExpIncrease}
+            onClick={() => navigate('/roadmap')}
             className="w-full py-4 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white text-xl rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
           >
             GAIN EXPERIENCE
