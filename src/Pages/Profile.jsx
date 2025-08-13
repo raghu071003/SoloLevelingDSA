@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import PulseLoading from '../components/Loading';
 
 export default function Profile() {
   const [currentExp, setCurrentExp] = useState(0);
@@ -72,7 +73,7 @@ export default function Profile() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white text-2xl">
-        Loading profile...
+        <PulseLoading />
       </div>
     );
   }

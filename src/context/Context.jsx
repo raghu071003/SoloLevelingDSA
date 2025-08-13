@@ -12,9 +12,9 @@ export function ContextProvider({ children }) {
     const [user,setUser] = useState();
     const [name,setName] = useState("");
 
-    useEffect(()=>{
-      authStatus()
-    })
+    // useEffect(()=>{
+    //   authStatus()
+    // },[])
   const onClose = ()=>{
         setOpen(false);
     }
@@ -32,7 +32,7 @@ export function ContextProvider({ children }) {
     }
 
   return (
-    <MyContext.Provider value={{ open, setOpen,prob,setProb,onClose,loggedin,setLoggedIn,user,setUser,name,setName }}>
+    <MyContext.Provider value={{ open, setOpen,prob,setProb,onClose,loggedin,setLoggedIn,user,setUser,name,setName,authStatus }}>
       {children}
     </MyContext.Provider>
   );

@@ -8,6 +8,8 @@ import Login from './Pages/Login'
 import Register from './Pages/Register'
 import Profile from './Pages/Profile'
 import Leaderboard from './Pages/Leaderboard'
+import GoogleLoginButton from './components/GoogleLogin'
+import LoginSuccess from './components/LoginSuccess'
 const App = () => {
   const {loggedin} = useContext(MyContext)
   return (
@@ -20,6 +22,8 @@ const App = () => {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element = {loggedin ? <RoadMap></RoadMap> : <Register />} />
           <Route path='/leaderboard' element = {loggedin ? <Leaderboard /> : <Login />} />
+          <Route path='/googlelogin' element = {<GoogleLoginButton />} />
+          <Route path='/loginSuccess' element = {loggedin ? <Homepage /> : <LoginSuccess />} />
         </Routes>
       
       </BrowserRouter>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import GoogleLoginButton from '../components/GoogleLogin';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -176,7 +177,7 @@ const Register = () => {
               </>
           </div>
 
-          
+          <GoogleLoginButton />
           {/* Footer */}
           <div className="mt-6 text-center">
             <p className="text-xl text-gray-500">

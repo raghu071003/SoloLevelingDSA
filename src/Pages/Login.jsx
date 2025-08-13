@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 import { MyContext } from '../context/Context';
-
+import GoogleLoginButton from '../components/GoogleLogin';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,7 +17,7 @@ const Login = () => {
         if(res.status === 200){
             navigate('/');
             setLoggedIn(true)
-            console.log(res.data.user);
+            // console.log(res.data.user);
             
             setUser(res.data.user)
         }
@@ -123,21 +123,22 @@ const Login = () => {
 
             {/* Login button */}
             <div
-              className="w-full relative group cursor-pointer"
+              className=" relative group cursor-pointer "
               onClick={() => {handleLogin()}}
             >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+              {/* <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300"></div> */}
               <div className=" text-xl relative px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white tracking-widest transition-all duration-300 group-hover:shadow-lg group-hover:shadow-purple-500/25">
-                <span className="relative z-10">
+                <span className="relative z-10 rounded-xl flex w-full">
                   {isHovered ? '[ ACCESSING SYSTEM ]' : '[ LOGIN ]'}
+                  
                 </span>
-                {isHovered && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400 rounded-lg opacity-20 animate-pulse"></div>
-                )}
               </div>
+              
+              
             </div>
+            <GoogleLoginButton/>
           </div>
-
+              
           {/* Stats/Level indicator */}
           <div className="mt-8 pt-6 border-t border-purple-500/30">
             <div className="flex justify-between items-center text-xs text-gray-400">
