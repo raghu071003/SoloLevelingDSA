@@ -13,7 +13,7 @@ const RoadMap = () => {
         setSheet(user.progress)
     },[sheet])
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden solo-level">
             {open && <Problems onClose={onClose}/>}
             {/* Background effects */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent_50%)]"></div>

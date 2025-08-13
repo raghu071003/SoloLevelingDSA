@@ -39,7 +39,7 @@ export default function ProblemHelperModal({ isOpen, onClose, url }) {
         }
       );
       const data = await response.json();
-      setExplanation(data.explanation || "No explanation returned from the Shadow Archive.");
+      setExplanation(data.explanation || "The Shadow Archive is currently unreachable. Please try again, Hunter.");
     } catch (err) {
       console.error(err);
       setError("The Shadow Archive is currently unreachable. Please try again, Hunter.");
@@ -56,7 +56,7 @@ export default function ProblemHelperModal({ isOpen, onClose, url }) {
   if (!isOpen) return null;
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50 transition-all duration-500 ${modalVisible ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={` reading-font fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50 transition-all duration-500 ${modalVisible ? 'opacity-100' : 'opacity-0'}`}>
       {/* Mystical Particles */}
       <div className="absolute inset-0">
         {[...Array(12)].map((_, i) => (

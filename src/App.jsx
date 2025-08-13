@@ -18,7 +18,7 @@ const App = () => {
           <Route path = '/roadmap' element={loggedin ? <RoadMap /> : <Login />} />
           <Route path = '/profile' element={loggedin ? <Profile /> : <Login />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/register' element = {loggedin ? <RoadMap></RoadMap> : <Login />} />
+          <Route path='/register' element = {loggedin ? <RoadMap></RoadMap> : <Register />} />
           <Route path='/leaderboard' element = {loggedin ? <Leaderboard /> : <Login />} />
         </Routes>
       
