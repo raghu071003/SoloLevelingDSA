@@ -11,19 +11,19 @@ export function ContextProvider({ children }) {
     const [loggedin,setLoggedIn] = useState(false);
     const [user,setUser] = useState();
     const [name,setName] = useState("");
+    const [loading,setLoading] = useState(false);
 
-    // useEffect(()=>{
-    //   authStatus()
-    // },[])
+    useEffect(()=>{
+      authStatus()
+    },[])
   const onClose = ()=>{
         setOpen(false);
     }
     const authStatus = async()=>{
       try {
-        const res = await axios.post('http://localhost:8090/api/v1/user/authStatus',{},{withCredentials:true});
+        const res = await axios.post('https://backendsololevel.onrender.com/api/v1/user/authStatus',{},{withCredentials:true});
         if(res.status === 200){
           setLoggedIn(true);
-          
           setUser(res.data.user)
         }
       } catch (error) {
@@ -32,7 +32,7 @@ export function ContextProvider({ children }) {
     }
 
   return (
-    <MyContext.Provider value={{ open, setOpen,prob,setProb,onClose,loggedin,setLoggedIn,user,setUser,name,setName,authStatus }}>
+    <MyContext.Provider value={{ open, setOpen,prob,setProb,onClose,loggedin,setLoggedIn,user,setUser,name,setName,authStatus ,loading,setLoading}}>
       {children}
     </MyContext.Provider>
   );

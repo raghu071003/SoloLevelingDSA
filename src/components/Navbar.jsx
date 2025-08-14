@@ -29,7 +29,7 @@ const Navbar = () => {
 
   const handleSignOut = async () => {
     try {
-      const res = await axios.post('http://localhost:8090/api/v1/user/logout', {}, { withCredentials: true });
+      const res = await axios.post('https://backendsololevel.onrender.com/api/v1/user/logout', {}, { withCredentials: true });
       if (res.status === 200) {
         navigate('/login')
         setLoggedIn(false);

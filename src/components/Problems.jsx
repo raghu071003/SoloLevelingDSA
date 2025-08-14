@@ -4,7 +4,10 @@ import gfgLogo from '../assets/gfglogo.png'
 import cnLogo from '../assets/cnlogo.png'
 import axios from 'axios';
 import ProblemHelperModal from './ProblemHelper';
-const ProblemCard = ({ prob, index, update,setIsOpen,setUrl}) => {
+import { Loader } from 'lucide-react';
+import PulseLoading from './Loading';
+const ProblemCard = ({ prob, index, update,setIsOpen,setUrl,loading}) => {
+
     const handleSolve = () => {
         update(index, true);
     }
@@ -24,7 +27,7 @@ const ProblemCard = ({ prob, index, update,setIsOpen,setUrl}) => {
             `}>
 
                 <div className="flex items-center justify-between gap-3">
-                    <input type="checkbox" checked={prob.Done} onChange={(e) => update(index, e.target.checked)} />
+                    {loading ? <PulseLoading/> : <input type="checkbox" checked={prob.Done} onChange={(e) => update(index, e.target.checked)} /> }
                     <h3 className="text-white  text-3xl flex-1 pr-4">
                         {prob.Problem}
                     </h3>
@@ -207,7 +210,7 @@ const Problems = ({ onClose }) => {
                                                 animationFillMode: 'both'
                                             }}
                                         >
-                                            <ProblemCard prob={prob} index={key} update={update} isOpen={isOpen} onClose={onClose} setIsOpen={setIsOpen} setUrl={setUrl}/>
+                                            <ProblemCard prob={prob} index={key} update={update} isOpen={isOpen} onClose={onClose} setIsOpen={setIsOpen} setUrl={setUrl} loading={loading}/>
                                         </div>
                                     );
                                 })}

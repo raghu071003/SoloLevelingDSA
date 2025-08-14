@@ -10,10 +10,12 @@ import Profile from './Pages/Profile'
 import Leaderboard from './Pages/Leaderboard'
 import GoogleLoginButton from './components/GoogleLogin'
 import LoginSuccess from './components/LoginSuccess'
+import LevelUpLoading from './Pages/LoadingPage'
 const App = () => {
-  const {loggedin} = useContext(MyContext)
+  const {loggedin,loading} = useContext(MyContext)
   return (
       <BrowserRouter>
+      {loading && <LevelUpLoading />}
       <Navbar />
         <Routes>
           <Route path='/' element={loggedin ? <Homepage /> : <Login/> } />

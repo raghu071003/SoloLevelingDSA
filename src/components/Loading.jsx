@@ -1,24 +1,35 @@
-import React from 'react';
+import { motion } from "framer-motion";
+import React from "react";
 
-export default function PulseLoading() {
+export default function PulseLoading({ size = 20, color = "#22d3ee" }) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="flex flex-col items-center space-y-6">
-        
-        {/* Pulse Wave Animation */}
-        <div className="relative flex items-center justify-center">
-          <div className="w-16 h-16 bg-blue-600 rounded-full animate-ping opacity-75"></div>
-          <div className="absolute w-10 h-10 bg-blue-600 rounded-full animate-pulse"></div>
-        </div>
-        
-        {/* Loading Text */}
-        <div className="text-center">
-          <p className="text-xl font-medium text-gray-700 animate-pulse">
-            Please wait...
-          </p>
-        </div>
-        
-      </div>
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: size, height: size }}
+    >
+      {/* Outer mana ring */}
+      <motion.div
+        className="absolute rounded-full border"
+        style={{
+          width: size,
+          height: size,
+          borderColor: `${color}40`,
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
+      />
+
+      {/* Inner glow */}
+      <motion.div
+        className="rounded-full"
+        style={{
+          width: size / 2,
+          height: size / 2,
+          backgroundColor: `${color}aa`,
+        }}
+        animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
+        transition={{ repeat: Infinity, duration: 1, ease: "easeInOut" }}
+      />
     </div>
   );
 }

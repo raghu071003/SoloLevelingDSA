@@ -8,7 +8,7 @@ export default function GoogleLoginButton() {
   const handleLogin = () => {
     // Simulate the login redirect
     // console.log("Redirecting to Google OAuth...");
-    window.location.href = "http://localhost:8090/api/v1/user/auth/google";
+    window.location.href = "https://backendsololevel.onrender.com/api/v1/user/auth/google";
 
   };
 

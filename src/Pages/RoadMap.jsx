@@ -3,15 +3,35 @@ import React, { useContext, useEffect,useState } from 'react'
 import Topic from '../components/Topic'
 import { MyContext } from '../context/Context'
 import Problems from '../components/Problems'
+import axios from 'axios'
 const RoadMap = () => {
     const [sheet,setSheet] = useState([]);
-    const {open,onClose,user} = useContext(MyContext); 
+    const {open,onClose,user,setLoading} = useContext(MyContext); 
     const totalDone = sheet.reduce((sum, topic) => sum + topic.doneQuestions, 0);
     const overallProgress = totalDone > 0 ? (totalDone / 450) * 100 : 0;
-    
+
     useEffect(()=>{
-        setSheet(user.progress)
-    },[sheet])
+        fetchSheet()
+    },[])
+    const fetchSheet = async()=>{
+        // console.log("fetching");
+        setLoading(true)
+        
+        try {
+            const res = await axios.post("https://backendsololevel.onrender.com/api/v1/user/getProgress",{},{withCredentials:true});
+            // console.log(res);
+            
+        if(res.status === 201){
+            // console.log(res.data);
+            
+            setSheet(res.data.progress);
+        }
+        } catch (error) {
+        }finally{
+            setLoading(false)
+
+        }
+    }
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden solo-level">
             {open && <Problems onClose={onClose}/>}
@@ -51,6 +71,7 @@ const RoadMap = () => {
                                     problem={topic.questions}
                                 />
                             </div>
+                            
                         );
                     })}
                 </div>

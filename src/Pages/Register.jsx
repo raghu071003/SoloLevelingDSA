@@ -32,7 +32,7 @@ const Register = () => {
     }
     try {
         setIsHovered(true)
-        const res = await axios.post('http://localhost:8090/api/v1/user/signup',{email:formData.email,password:formData.password,fullName:formData.hunterName})
+        const res = await axios.post('https://backendsololevel.onrender.com/api/v1/user/signup',{email:formData.email,password:formData.password,fullName:formData.hunterName})
         if(res.status == 200){
             navigate('/login');
         }else{

@@ -30,7 +30,7 @@ export default function Leaderboard() {
     const fetchLeaderboard = async () => {
       try {
         setLoading(true);
-        const response = await axios.post("http://localhost:8090/api/v1/user/leaderboard",{},{withCredentials:true});
+        const response = await axios.post("https://backendsololevel.onrender.com/api/v1/user/leaderboard",{},{withCredentials:true});
         const data = response.data
         setPlayers(data);
         setTimeout(() => setAnimateRows(true), 500);

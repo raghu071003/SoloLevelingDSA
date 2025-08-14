@@ -28,7 +28,7 @@ export default function ProblemHelperModal({ isOpen, onClose, url }) {
 
     try {
       const response = await fetch(
-        "http://localhost:8090/api/v1/user/getHelp",
+        "https://backendsololevel.onrender.com/api/v1/user/getHelp",
         {
           method: "POST",
           headers: {

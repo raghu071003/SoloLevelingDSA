@@ -19,7 +19,7 @@ export default function Profile() {
   const fetchData = async () => {
   try {
     const res = await axios.post(
-      'http://localhost:8090/api/v1/user/profile',
+      'https://backendsololevel.onrender.com/api/v1/user/profile',
       {},
       { withCredentials: true }
     );
